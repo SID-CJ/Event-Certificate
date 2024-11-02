@@ -1,30 +1,15 @@
-import { supabase } from '../supabaseclient';
-import { useState,useEffect } from 'react';
-function App() {
-  const[fetchError,setFecthError]=useState(null)
-  const[org,setOrg]=useState(null)
-  useEffect(()=>{
-    const fetchData=async() =>{
-      const{data,errors}= await supabase
-      .from('organisation')
-      .select()
-      if (error){
-        setFecthError('Sorry')
-        setOrg(null)
-        console.log(error)
-      }
-      if (data){
-        setOrg(data)
-        setFecthError(null)
-      }
-    } 
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Admin from './views/admin/Admin';
 
-    fetchData()
-  },[])
+function App() {
   return (
-    <div>
-      <h1>data</h1>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/admin" replace />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
+    </Router>
   );
 }
 
