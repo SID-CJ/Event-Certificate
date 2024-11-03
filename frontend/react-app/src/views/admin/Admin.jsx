@@ -1,12 +1,12 @@
 import { supabase } from '../../../supabaseclient';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import '../../customStyles.css';
 
 function Admin() {
-  const navigate = useNavigate();  // Initialize the navigate function
+  const navigate = useNavigate();
   const [fetchError, setFetchError] = useState(null);
   const [org, setOrg] = useState(null);
 
@@ -16,7 +16,7 @@ function Admin() {
         .from('organisation')
         .select();
 
-      console.log("Data:", data, "Error:", error);  // Log data and error for debugging
+      console.log("Data:", data, "Error:", error);
 
       if (error) {
         setFetchError('Sorry, there was an error fetching data.');
@@ -30,8 +30,10 @@ function Admin() {
     fetchData();
   }, []);
 
-  const handleButtonClick = () => {
-    navigate('/event');  // Redirect to the Event page
+  // Updated handleButtonClick to accept an item parameter
+  const handleButtonClick = (item) => {
+    // Pass the organization ID and name as state or query parameters
+    navigate('/event', { state: { orgId: item.org_id, orgName: item.org_name } });
   };
 
   return (
@@ -45,7 +47,7 @@ function Admin() {
               <Button 
                 key={item.org_id} 
                 style={{ display: 'block', margin: '10px auto' }} 
-                onClick={handleButtonClick}  // Add onClick to button
+                onClick={() => handleButtonClick(item)}  // Pass item to handleButtonClick
               >
                 {item.org_name}
               </Button>

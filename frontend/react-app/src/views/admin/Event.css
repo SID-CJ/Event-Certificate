@@ -1,0 +1,75 @@
+/* event.css */
+
+/* Center the form container in the middle of the page */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style the form heading */
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+  }
+  
+  /* Style the form labels */
+  label {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  /* Style the form input fields */
+  .form-control {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 1rem;
+  }
+  
+  /* Style invalid feedback text */
+  .form-control.is-invalid {
+    border-color: #e3342f;
+  }
+  
+  .form-control.is-invalid + .invalid-feedback {
+    color: #e3342f;
+  }
+  
+  /* Style the submit button */
+  button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Error message styling */
+  .text-danger {
+    color: #e3342f;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  /* Paragraph styles for org ID and name */
+  p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  

@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { useLocation } from 'react-router-dom';
+import { supabase } from '../../../supabaseclient';
+import './Event.css'
 function EventForm() {
+  const location = useLocation();
+  const { orgId, orgName } = location.state || {};  // Retrieve orgId and orgName from state
+
   const [formData, setFormData] = useState({
     eventName: '',
     depId: '',
-    orgId: '',
+    orgId: orgId || '',  // Pre-set orgId from location.state if available
     date: '',
     entryFee: '',
     factId: ''
   });
 
   const [errors, setErrors] = useState({});
+  const [submissionError, setSubmissionError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,27 +37,62 @@ function EventForm() {
     return Object.keys(formErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmissionError(null);
+
     if (validateForm()) {
-      // Handle form submission, e.g., send data to an API
-      console.log('Form Data:', formData);
-      // Reset form
-      setFormData({
-        eventName: '',
-        depId: '',
-        orgId: '',
-        date: '',
-        entryFee: '',
-        factId: ''
-      });
-      setErrors({});
+      try {
+        // Fetch the latest event_id from the table
+        const { data: latestEvent, error: fetchError } = await supabase
+          .from('event')
+          .select('event_id')
+          .order('event_id', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (fetchError) throw fetchError;
+
+        // If no latestEvent is found, start with event_id 1
+        const newEventId = latestEvent ? latestEvent.event_id + 1 : 1;
+
+        // Insert new event with generated event_id
+        const { error: insertError } = await supabase
+          .from('event')
+          .insert({
+            event_id: newEventId, // Set the incremented event_id
+            event_name: formData.eventName,
+            dept_id: formData.depId,
+            org_id: formData.orgId, // Use the orgId from formData
+            date: formData.date,
+            entry_fee: formData.entryFee,
+            fact_id: formData.factId
+          });
+
+        if (insertError) throw insertError;
+
+        console.log('Form submitted successfully:', formData);
+        // Reset form after successful submission
+        setFormData({
+          eventName: '',
+          depId: '',
+          orgId: orgId, // Reset orgId
+          date: '',
+          entryFee: '',
+          factId: ''
+        });
+        setErrors({});
+      } catch (error) {
+        console.error('Error:', error);
+        setSubmissionError('Failed to submit the form. Please try again.');
+      }
     }
   };
 
   return (
     <Container className="mt-5">
       <h2>Create Event</h2>
+      {submissionError && <p className="text-danger">{submissionError}</p>}
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formEventName">
           <Form.Label>Event Name</Form.Label>
@@ -89,6 +130,7 @@ function EventForm() {
             value={formData.orgId}
             onChange={handleChange}
             isInvalid={!!errors.orgId}
+            disabled  // Disable the input for orgId
           />
           <Form.Control.Feedback type="invalid">
             {errors.orgId}
