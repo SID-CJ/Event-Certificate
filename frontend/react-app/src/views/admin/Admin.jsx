@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import '../../customStyles.css';
+import './Admin.css';
 
 function Admin() {
   const navigate = useNavigate();

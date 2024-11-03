@@ -90,7 +90,7 @@ function EventForm() {
   };
 
   return (
-    <Container className="mt-5">
+    <Container className="container" style={{ minHeight: '150vh', width: '150vw' }}>
       <h2>Create Event</h2>
       {submissionError && <p className="text-danger">{submissionError}</p>}
       <Form onSubmit={handleSubmit}>
