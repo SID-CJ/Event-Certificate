@@ -1,0 +1,11 @@
+
+/* customStyles.css */
+.custom-background {
+    background-color: #eee8a6; /* Example light blue color */
+    background-image: url('/src/assets/dark-blue-wide-background-with-radial-blurred-gradient-vector.jpg'); /* Optional: background image */
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh; /* Ensures full viewport height */
+  }
+  
+  
