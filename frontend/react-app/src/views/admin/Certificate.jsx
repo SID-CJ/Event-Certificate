@@ -1,127 +1,152 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import './Certificate.css';
+import backgroundImg from './background.png'; // Adjust the path as necessary
 
 const Certificate = () => {
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
-    const [showCertificate, setShowCertificate] = useState(false);
+    const [eventName, setEventName] = useState(''); // Initialize as empty
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true); // Loading state
+    const [showCertificate, setShowCertificate] = useState(false); // State to control certificate display
+
+    // Fetch event details from the database on component mount
+    useEffect(() => {
+        const fetchEventDetails = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch('/api/event'); // Ensure this is your correct API endpoint
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                // Assuming the response contains fields for name, date, and event name
+                setName(data.name || '');  // Adjust based on your API response structure
+                setDate(data.date || '');  // Adjust based on your API response structure
+                setEventName(data.eventName || ''); // Set fetched event name
+            } catch (error) {
+                console.error('Error fetching event details:', error);
+                setEventName(''); 
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEventDetails();
+    }, []);
 
     const generateCertificate = () => {
-        if (name && date) {
-            setShowCertificate(true);
+        if (!name || !date || !eventName) {
+            setError("Please fill in all fields.");
+            setShowCertificate(false); // Hide certificate if there is an error
         } else {
-            alert("Please fill in both fields.");
+            setError('');
+            setShowCertificate(true); // Show certificate if all fields are filled
         }
     };
 
     const downloadCertificate = () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = 1200; // Set the canvas width
-        canvas.height = 800; // Set the canvas height
+        canvas.width = 1200;
+        canvas.height = 800;
 
-        // Set the background color
-        ctx.fillStyle = '#ffcc00';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const img = new Image();
+        img.src = backgroundImg;
 
-        // Draw the border
-        ctx.lineWidth = 10;
-        ctx.strokeStyle = '#ff6600';
-        ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        // Draw text
-        ctx.fillStyle = '#000';
-        ctx.textAlign = 'center';
-        ctx.font = '48px "Lobster", cursive';
-        ctx.fillText('FEDERAL INSTITUTE OF SCIENCE AND TECHNOLOGY', canvas.width / 2, 300);
-        
-        ctx.font = '48px Arial';
-        ctx.fillText('Certificate of Participation', canvas.width / 2, 370);
-        
-        ctx.font = '32px Arial';
-        ctx.fillText('This certifies that', canvas.width / 2, 440);
-        
-        ctx.font = '36px Arial';
-        ctx.fillText(name, canvas.width / 2, 500);
-        
-        ctx.font = '32px Arial';
-        ctx.fillText('has participated in the event on', canvas.width / 2, 560);
-        ctx.fillText(new Date(date).toLocaleDateString(), canvas.width / 2, 610);
+            // Draw the border
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = '#ff6600';
+            ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
 
-        // Download the certificate
-        const link = document.createElement('a');
-        link.download = 'certificate.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+            // Draw text
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'center';
+            ctx.font = '40px "Lobster", cursive';
+            ctx.fillText('FEDERAL INSTITUTE OF SCIENCE AND TECHNOLOGY', canvas.width / 2, 300);
+            
+            ctx.font = '38px Arial';
+            ctx.fillText('Certificate of Participation', canvas.width / 2, 370);
+            
+            ctx.font = '32px Arial';
+            ctx.fillText('This certifies that', canvas.width / 2, 440);
+            
+            ctx.font = '36px Arial';
+            ctx.fillText(name, canvas.width / 2, 500);
+            
+            ctx.font = '32px Arial';
+            ctx.fillText('has participated in the event', canvas.width / 2, 560);
+            ctx.fillText(eventName || 'Event Name Unavailable', canvas.width / 2, 600); // Show event name or fallback
+            ctx.fillText('on', canvas.width / 2, 640);
+            ctx.fillText(new Date(date).toLocaleDateString(), canvas.width / 2, 680); // Only show date
+
+            // Download the certificate
+            const link = document.createElement('a');
+            link.download = 'certificate.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        };
     };
 
     return (
-        <div style={{ 
-            display: 'flex', 
-            gridTemplateColumns: '1fr', 
-            gridTemplateRows: 'auto 1fr', 
-            alignItems: 'center', 
-            justifyItems: 'flex-end', 
-            minHeight: '100vh',
-            backgroundColor: '#f0f8ff',
-            paddingLeft:"700px",
-            width:'1050px'
-          
-        }}>
-            <h1 style={{textAlign:'center',alignItems:'flex-start',height:'1000px',justifyContent:'center'}}>Event Certificate Generator</h1>
-            <form onSubmit={(e) => e.preventDefault()} style={{ textAlign: 'center', marginBottom: '20px' }}>
-                <label>
-
-                    Name:
-                    <input 
-                        type="text" 
-                        value={name} 
-                        onChange={(e) => setName(e.target.value)} 
-                        required 
-                        style={{ margin: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
-                    />
-                </label>
-                <br />
-                <label>
-                    Date:
-                    <input 
-                        type="date" 
-                        value={date} 
-                        onChange={(e) => setDate(e.target.value)} 
-                        required 
-                        style={{ margin: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
-                    />
-                </label>
-                <br />
-                <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <button type="button" onClick={generateCertificate} style={{ padding: '10px 20px', borderRadius: '5px', backgroundColor: '#28a745', color: '#fff', border: 'none', cursor: 'pointer' }}>
+        <div className="certificate-container">
+            <h1>Event Certificate Generator</h1>
+            {loading ? (
+                <p>Loading event details...</p>
+            ) : (
+                <form onSubmit={(e) => e.preventDefault()} className="certificate-form">
+                    <label>
+                        Name:
+                        <input 
+                            type="text" 
+                            value={name} 
+                            onChange={(e) => setName(e.target.value)} 
+                            required 
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Date:
+                        <input 
+                            type="date" 
+                            value={date} 
+                            onChange={(e) => setDate(e.target.value)} 
+                            required 
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Event Name:
+                        <input 
+                            type="text" 
+                            value={eventName} 
+                            onChange={(e) => setEventName(e.target.value)} 
+                            placeholder="Enter event name" 
+                            required 
+                        />
+                    </label>
+                    <br />
+                    {error && <p className="error-message">{error}</p>}
+                    <button type="button" onClick={generateCertificate}>
                         Generate Certificate
                     </button>
-                </div>
-            </form>
+                </form>
+            )}
 
-            {showCertificate && (
-                <div style={{ 
-                    border: '2px solid #000', 
-                    padding: '20px', 
-                    textAlign: 'center', 
-                    margin: '20px', 
-                    width: '80%', 
-                    maxWidth: '1000px', 
-                    backgroundColor: '#fff', 
-                    borderRadius: '10px', 
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center',
-                    justifyContent: 'center', 
-                }}>
-                    <h2 style={{ color: '#ff6600' }}>Certificate of Participation</h2>
-                    <h3 style={{ fontFamily: '"Lobster", cursive', color: '#ff6600', margin: '10px 0' }}>FEDERAL INSTITUTE OF SCIENCE AND TECHNOLOGY</h3>
+            {showCertificate && !loading && (
+                <div className="certificate-preview">
+                    <h2>Certificate of Participation</h2>
+                    <h3>FEDERAL INSTITUTE OF SCIENCE AND TECHNOLOGY</h3>
                     <p>This certifies that</p>
-                    <h3 style={{ color: '#007bff' }}>{name}</h3>
-                    <p>has participated in the event on</p>
-                    <p>{new Date(date).toLocaleDateString()}</p>
-                    <button onClick={downloadCertificate} style={{ marginTop: '20px', padding: '10px 20px', borderRadius: '5px', backgroundColor: '#007bff', color: '#fff', border: 'none', cursor: 'pointer' }}>
+                    <h3>{name}</h3>
+                    <p>has participated in the event</p>
+                    <h3>{eventName}</h3>
+                    <p>on</p>
+                    <p>{new Date(date).toLocaleDateString()}</p> {/* Only displaying date */}
+                    <button onClick={downloadCertificate}>
                         Download Certificate
                     </button>
                 </div>

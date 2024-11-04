@@ -1,0 +1,96 @@
+/* Certificate.css */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff; /* Light background for the page */
+}
+
+.certificate-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+.certificate-form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+input[type="text"],
+input[type="date"] {
+    margin: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    width: 250px; /* Set a fixed width */
+}
+
+button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+}
+
+.certificate-preview {
+    border: 2px solid #000;
+    padding: 20px;
+    text-align: center;
+    margin: 20px;
+    width: 80%;
+    max-width: 1000px;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.certificate-preview h2 {
+    color: #ff6600;
+}
+
+.certificate-preview h3 {
+    font-family: 'Lobster', cursive;
+    color: #ff6600;
+    margin: 10px 0;
+}
+
+.certificate-preview p {
+    font-size: 20px;
+}
+
+.certificate-preview button {
+    background-color: #007bff;
+}
+
+.certificate-preview button:hover {
+    background-color: #0056b3;
+}
