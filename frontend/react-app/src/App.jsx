@@ -7,6 +7,7 @@ import Certificate from './views/admin/Certificate';
 import Sidebar from './components/sidebar';
 import Login from './views/login/Login';
 import Certi from './views/admin/Certi';
+import Parti from './views/admin/participant'
 
 function AppContent() {
   const location = useLocation();
@@ -26,6 +27,7 @@ function AppContent() {
         <Route path="/event" element={<Event />} />
         <Route path="/login" element={<Login />} />
         <Route path="/certi" element={<Certi />} />
+        <Route path="/assign-participants" element={<Parti />} />
       </Routes>
     </div>
   );

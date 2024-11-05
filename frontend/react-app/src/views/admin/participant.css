@@ -1,0 +1,47 @@
+/* participant.css */
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    background-image: url(../../assets/bgg.webp);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 80vh;
+    width: 100%;
+    padding: 20px;
+    margin-left: 420px;
+  }
+  
+  .centered-container h1 {
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #fefefe;
+  }
+  
+  .centered-container input[type="file"] {
+    margin-bottom: 15px;
+    font-size: 1em;
+    padding: 10px;
+  }
+  
+  .centered-container button {
+    margin-bottom: 15px;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .centered-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  .centered-container p {
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: #28a745;
+  }
+  

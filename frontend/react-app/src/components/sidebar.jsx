@@ -10,6 +10,7 @@ function Sidebar() {
         <li><Link to="/create-event">Create Event</Link></li>
         <li><Link to="/view-event">View Event</Link></li>
         <li><Link to="/generate-certificate">Generate Certificate</Link></li>
+        <li><Link to="/assign-participants">Assign Participants</Link></li> {/* New link added */}
       </ul>
     </div>
   );
