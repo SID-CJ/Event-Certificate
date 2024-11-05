@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../../supabaseclient'; // Adjust the path as needed
+import { supabase } from '../../../supabaseclient';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
-import './view.css'
+import './view.css';
 
 function EventList() {
   const [events, setEvents] = useState([]);
@@ -16,10 +16,9 @@ function EventList() {
       try {
         const { data, error } = await supabase
           .from('event')
-          .select('*'); // Select all columns; modify if you need specific columns
+          .select('*');
 
         if (error) throw error;
-
         setEvents(data);
       } catch (error) {
         setError('Error fetching events: ' + error.message);
@@ -31,22 +30,19 @@ function EventList() {
     fetchEvents();
   }, []);
 
-  // Get today's date
-  const today = new Date().toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
-
-  // Filter events into upcoming and finished
+  const today = new Date().toISOString().split('T')[0];
   const upcomingEvents = events.filter(event => event.date > today);
   const finishedEvents = events.filter(event => event.date <= today);
 
   return (
-    <Container className="mt-5">
-      <h2>Upcoming Events</h2>
+    <Container className="eventList-container">
+      <h2 className="eventList-heading">Upcoming Events</h2>
       {loading ? (
-        <Spinner animation="border" variant="primary" />
+        <Spinner animation="border" variant="primary" className="eventList-spinner" />
       ) : error ? (
-        <Alert variant="danger">{error}</Alert>
+        <Alert variant="danger" className="eventList-error">{error}</Alert>
       ) : upcomingEvents.length > 0 ? (
-        <Table striped bordered hover>
+        <Table striped bordered hover className="eventList-table-container">
           <thead>
             <tr>
               <th>Event ID</th>
@@ -59,7 +55,7 @@ function EventList() {
             </tr>
           </thead>
           <tbody>
-            {upcomingEvents.map((event) => (
+            {upcomingEvents.map(event => (
               <tr key={event.event_id}>
                 <td>{event.event_id}</td>
                 <td>{event.event_name}</td>
@@ -73,16 +69,16 @@ function EventList() {
           </tbody>
         </Table>
       ) : (
-        <p>No upcoming events found.</p>
+        <p className="eventList-noEvents">No upcoming events found.</p>
       )}
 
-      <h2>Finished Events</h2>
+      <h2 className="eventList-heading">Finished Events</h2>
       {loading ? (
-        <Spinner animation="border" variant="primary" />
+        <Spinner animation="border" variant="primary" className="eventList-spinner" />
       ) : error ? (
-        <Alert variant="danger">{error}</Alert>
+        <Alert variant="danger" className="eventList-error">{error}</Alert>
       ) : finishedEvents.length > 0 ? (
-        <Table striped bordered hover>
+        <Table striped bordered hover className="eventList-table">
           <thead>
             <tr>
               <th>Event ID</th>
@@ -95,7 +91,7 @@ function EventList() {
             </tr>
           </thead>
           <tbody>
-            {finishedEvents.map((event) => (
+            {finishedEvents.map(event => (
               <tr key={event.event_id}>
                 <td>{event.event_id}</td>
                 <td>{event.event_name}</td>
@@ -109,7 +105,7 @@ function EventList() {
           </tbody>
         </Table>
       ) : (
-        <p>No finished events found.</p>
+        <p className="eventList-noEvents">No finished events found.</p>
       )}
     </Container>
   );

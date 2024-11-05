@@ -1,0 +1,43 @@
+/* view.css */
+
+/* Full viewport centering */
+.centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    width: 100vw;      /* Full viewport width */
+    background-color: #3b72c5; /* Soft background color */
+    padding: 20px;
+}
+
+/* Card styling */
+.event-table-container {
+    background-color: #4e6ed4;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Heading */
+h2 {
+    text-align: center;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+/* Loading spinner */
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
+/* Table styling */
+.table {
+    text-align: center;
+    margin-top: 20px;
+}
