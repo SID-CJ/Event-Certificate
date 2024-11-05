@@ -59,7 +59,7 @@ function EventList() {
               <tr key={event.event_id}>
                 <td>{event.event_id}</td>
                 <td>{event.event_name}</td>
-                <td>{event.dep_id}</td>
+                <td>{event.dept_id}</td>
                 <td>{event.org_id}</td>
                 <td>{event.date}</td>
                 <td>{event.entry_fee}</td>

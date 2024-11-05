@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseclient'; // Adjust path as needed
+import { useLocation } from 'react-router-dom'; // Import useLocation to get passed state
 import './certi.css';
 import backgroundImg from '../../assets/background.png';
 
 const Certi = () => {
+    const location = useLocation();
+    const { eventId, eventName } = location.state || {}; // Get eventId and eventName from the location state
+
     const [participants, setParticipants] = useState([]); // State to store participant names
     const [selectedName, setSelectedName] = useState('');
     const [date, setDate] = useState('');
-    const [eventName, setEventName] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [showCertificate, setShowCertificate] = useState(false);
@@ -18,7 +21,8 @@ const Certi = () => {
             try {
                 const { data, error } = await supabase
                     .from('participant')
-                    .select('participant_name');
+                    .select('participant_name')
+                    .eq('event_id', eventId); // Filter participants by the specific event_id
                 
                 if (error) {
                     throw error;
@@ -32,8 +36,10 @@ const Certi = () => {
             }
         };
 
-        fetchParticipants();
-    }, []);
+        if (eventId) {
+            fetchParticipants(); // Fetch participants only if eventId is present
+        }
+    }, [eventId]); // Run effect when eventId changes
 
     const generateCertificate = () => {
         if (!selectedName || !date || !eventName) {
@@ -124,16 +130,8 @@ const Certi = () => {
                         />
                     </label>
                     <br />
-                    <label>
-                        Event Name:
-                        <input 
-                            type="text" 
-                            value={eventName} 
-                            onChange={(e) => setEventName(e.target.value)} 
-                            placeholder="Enter event name" 
-                            required 
-                        />
-                    </label>
+                    {/* Display the event name that was passed */}
+                    <h3>Event Name: {eventName || 'Event Name Unavailable'}</h3>
                     <br />
                     {error && <p className="error-message">{error}</p>}
                     <button type="button" onClick={generateCertificate}>
