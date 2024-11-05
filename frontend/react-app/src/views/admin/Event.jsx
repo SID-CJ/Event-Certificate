@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button, Container, Toast } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '../../../supabaseclient';
-import './Event.css'
+import './Event.css';
+
 function EventForm() {
   const location = useLocation();
   const { orgId, orgName } = location.state || {};  // Retrieve orgId and orgName from state
@@ -19,6 +20,8 @@ function EventForm() {
 
   const [errors, setErrors] = useState({});
   const [submissionError, setSubmissionError] = useState(null);
+  const [showToast, setShowToast] = useState(false); // State for toast visibility
+  const [toastMessage, setToastMessage] = useState(''); // State for toast message
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,6 +75,11 @@ function EventForm() {
         if (insertError) throw insertError;
 
         console.log('Form submitted successfully:', formData);
+
+        // Show success toast message
+        setToastMessage('Event created successfully!');
+        setShowToast(true);
+
         // Reset form after successful submission
         setFormData({
           eventName: '',
@@ -183,6 +191,17 @@ function EventForm() {
           Submit
         </Button>
       </Form>
+
+      {/* Toast for success message */}
+      <Toast 
+        onClose={() => setShowToast(false)} 
+        show={showToast} 
+        delay={3000} 
+        autohide 
+        style={{ position: 'absolute', top: '20px', right: '20px' }}
+      >
+        <Toast.Body>{toastMessage}</Toast.Body>
+      </Toast>
     </Container>
   );
 }
